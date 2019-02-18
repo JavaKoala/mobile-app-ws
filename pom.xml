@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<start-class>com.appsdeveloperblog.app.ws.MobileAppWsApplicaiton</start-class>
 	</properties>
 
 	<dependencies>
