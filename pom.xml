@@ -14,11 +14,6 @@
 	<name>mobile-app-ws</name>
 	<description>Demo project for Spring Boot</description>
 
-	<properties>
-		<java.version>11</java.version>
-		<start-class>com.appsdeveloperblog.app.ws.MobileAppWsApplicaiton</start-class>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
