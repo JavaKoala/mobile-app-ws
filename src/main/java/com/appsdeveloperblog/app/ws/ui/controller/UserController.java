@@ -55,6 +55,7 @@ public class UserController {
 
 		// UserDto userDto = new UserDto();
 		// BeanUtils.copyProperties(userDetails, userDto);
+		// http://modelmapper.org/getting-started/
 		ModelMapper modelMapper = new ModelMapper();
 		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
