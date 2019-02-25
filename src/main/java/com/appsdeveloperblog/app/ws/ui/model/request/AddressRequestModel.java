@@ -4,7 +4,7 @@ public class AddressRequestModel {
 
 	private String city;
 	private String country;
-	private String streetname;
+	private String streetName;
 	private String postalCode;
 	private String type;
 
@@ -24,12 +24,12 @@ public class AddressRequestModel {
 		this.country = country;
 	}
 
-	public String getStreetname() {
-		return streetname;
+	public String getStreetName() {
+		return streetName;
 	}
 
-	public void setStreetname(String streetname) {
-		this.streetname = streetname;
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
 	}
 
 	public String getPostalCode() {
