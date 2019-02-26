@@ -40,6 +40,9 @@ public class UserController {
 	UserService userService;
 
 	@Autowired
+	AddressService addressService;
+
+	@Autowired
 	AddressService addressesService;
 
 	@GetMapping(path="/{id}",
@@ -132,5 +135,16 @@ public class UserController {
 		    returnValue = new ModelMapper().map(addressDTO, listType);
 		}
 	    return returnValue;
+	}
+
+	// http://localhost:8080/mobile-app-ws/users/abc123/addresses
+	@GetMapping(path="/{userId}/addresses/{addressId}",
+			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	public AddressesRest getUserAddress(@PathVariable String addressId) {
+
+		AddressDTO addressesDto = addressService.getAddress(addressId);
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(addressesDto, AddressesRest.class);
+
 	}
 }
