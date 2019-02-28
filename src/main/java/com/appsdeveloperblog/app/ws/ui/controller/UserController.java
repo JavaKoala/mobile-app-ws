@@ -9,6 +9,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -129,15 +130,22 @@ public class UserController {
 	@GetMapping(path="/{id}/addresses",
 			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public List<AddressesRest> getUserAddresses(@PathVariable String id) {
-		List<AddressesRest> returnValue = new ArrayList<>();
+		List<AddressesRest> addressesListRestModel = new ArrayList<>();
 
 		List<AddressDTO> addressDTO = addressesService.getAddresses(id);
 
 		if(addressDTO != null && !addressDTO.isEmpty()) {
 		    Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
-		    returnValue = new ModelMapper().map(addressDTO, listType);
+		    addressesListRestModel = new ModelMapper().map(addressDTO, listType);
+		    for(AddressesRest addressRest : addressesListRestModel) {
+		    	Link addressLink = linkTo(methodOn(UserController.class).getUserAddress(id, addressRest.getAddressId())).withSelfRel();
+		    	addressRest.add(addressLink);
+
+		    	Link userLink = linkTo(methodOn(UserController.class).getUser(id)).withRel("user");
+				addressRest.add(userLink);
+		    }
 		}
-	    return returnValue;
+	    return addressesListRestModel;
 	}
 
 	// http://localhost:8080/mobile-app-ws/users/abc123/addresses
