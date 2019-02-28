@@ -9,7 +9,8 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -128,8 +129,10 @@ public class UserController {
 
 	// http://localhost:8080/mobile-app-ws/users/abc123/addresses
 	@GetMapping(path="/{id}/addresses",
-			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public List<AddressesRest> getUserAddresses(@PathVariable String id) {
+			produces = { MediaType.APPLICATION_XML_VALUE, 
+					     MediaType.APPLICATION_JSON_VALUE,
+					     "application/hal+json"})
+	public Resources<AddressesRest> getUserAddresses(@PathVariable String id) {
 		List<AddressesRest> addressesListRestModel = new ArrayList<>();
 
 		List<AddressDTO> addressDTO = addressesService.getAddresses(id);
@@ -145,13 +148,15 @@ public class UserController {
 				addressRest.add(userLink);
 		    }
 		}
-	    return addressesListRestModel;
+	    return new Resources<>(addressesListRestModel);
 	}
 
 	// http://localhost:8080/mobile-app-ws/users/abc123/addresses
 	@GetMapping(path="/{userId}/addresses/{addressId}",
-			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public AddressesRest getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
+			produces = { MediaType.APPLICATION_XML_VALUE, 
+					     MediaType.APPLICATION_JSON_VALUE,
+					     "application/hal+json"})
+	public Resource<AddressesRest> getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
 
 		AddressDTO addressesDto = addressService.getAddress(addressId);
 		ModelMapper modelMapper = new ModelMapper();
@@ -162,7 +167,7 @@ public class UserController {
 		addressesRestModel.add(addressLink);
 		addressesRestModel.add(userLink);
 		addressesRestModel.add(addressesLink);
-		return addressesRestModel;
+		return new Resource<>(addressesRestModel);
 
 	}
 }
