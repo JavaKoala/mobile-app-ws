@@ -18,6 +18,7 @@ import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.io.repositories.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
+import com.appsdeveloperblog.app.ws.shared.EmailService;
 import com.appsdeveloperblog.app.ws.shared.Utils;
 import com.appsdeveloperblog.app.ws.shared.dto.AddressDTO;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	BCryptPasswordEncoder bCryptpasswordEncoder;
+
+	@Autowired
+	EmailService emailService;
 
 	@Override
 	public UserDto createUser(UserDto user) {
@@ -59,6 +63,9 @@ public class UserServiceImpl implements UserService {
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 
 		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
+
+		// Send and email message to user to verify their email address
+		emailService.verifyEmail(returnValue);
 
 		return returnValue;
 	}
