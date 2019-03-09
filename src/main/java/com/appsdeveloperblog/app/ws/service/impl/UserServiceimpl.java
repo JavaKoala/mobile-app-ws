@@ -15,7 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
+import com.appsdeveloperblog.app.ws.io.entity.PasswordResetTokenEntity;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
+import com.appsdeveloperblog.app.ws.io.repositories.PasswordResetTokenRepository;
 import com.appsdeveloperblog.app.ws.io.repositories.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.EmailService;
@@ -38,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	EmailService emailService;
+
+	@Autowired
+	PasswordResetTokenRepository passwordResetTokenRepository;
 
 	@Override
 	public UserDto createUser(UserDto user) {
@@ -162,6 +167,27 @@ public class UserServiceImpl implements UserService {
 				returnValue = true;
 			}
 		}
+		return returnValue;
+	}
+
+	@Override
+	public boolean requestPasswordReset(String email) {
+		boolean returnValue = true;
+		UserEntity userEntity = userRepository.findByEmail(email);
+		if (userEntity == null) {
+			returnValue = false;
+		}
+
+		String token = new Utils().generatePasswordResetToken(userEntity.getUserId());
+
+		PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+		passwordResetTokenEntity.setToken(token);
+		passwordResetTokenEntity.setUserDetails(userEntity);
+		passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+		emailService.sendPasswordResetRequest(userEntity.getFirstName(),
+				userEntity.getEmail(),
+				token);
 		return returnValue;
 	}
 

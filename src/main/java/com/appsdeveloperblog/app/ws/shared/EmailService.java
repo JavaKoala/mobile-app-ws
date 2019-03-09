@@ -69,4 +69,19 @@ public class EmailService {
         mailSender.send(mailMessage);
         System.out.println("Email verification sent to " + userDto.getEmail());
     }
+
+	public void sendPasswordResetRequest(String firstName, String email, String token) {
+
+		String htmlBodyWithToken = PASSWORD_RESET_HTMLBODY.replace("$tokenValue", token);
+		       htmlBodyWithToken = htmlBodyWithToken.replace("$firstName", firstName);
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(email);
+		mailMessage.setSubject(PASSWORD_RESET_SUBJECT);
+		mailMessage.setText(htmlBodyWithToken);
+		mailMessage.setFrom(FROM);
+	    mailSender.send(mailMessage);
+		System.out.println("Password reset email sent to " + email);
+
+	}
 }
