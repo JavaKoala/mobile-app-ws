@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -98,6 +99,7 @@ class UserServiceImplTest {
 		when(utils.generateUserId(anyInt())).thenReturn(userId);
 		when(bCryptpasswordEncoder.encode(anyString())).thenReturn(encryptedPassword);
 		when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
+		Mockito.doNothing().when(emailService).verifyEmail(any(UserDto.class));
 
 		UserDto userDto = new UserDto();
 		userDto.setAddresses(getAddressesDto());
