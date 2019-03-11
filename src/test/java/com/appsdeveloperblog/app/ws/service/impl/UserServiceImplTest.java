@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.io.entity.AddressEntity;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.io.repositories.PasswordResetTokenRepository;
@@ -89,6 +90,23 @@ class UserServiceImplTest {
 					userService.getUser("test@test.com");
 				}
 				);
+	}
+
+	@Test
+	final void testCreateUser_CreateUserServiceException() {
+		UserDto userDto = new UserDto();
+		userDto.setAddresses(getAddressesDto());
+		userDto.setFirstName("Test");
+		userDto.setLastName("User");
+		userDto.setPassword("password");
+		userDto.setEmail("test@test.com");
+		when(userRepository.findByEmail(anyString())).thenReturn(userEntity);
+
+		assertThrows(UserServiceException.class,
+				() -> {
+					userService.createUser(userDto);
+				}
+		);
 	}
 
 	@Test
