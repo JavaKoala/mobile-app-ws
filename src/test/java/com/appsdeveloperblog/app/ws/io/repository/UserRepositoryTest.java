@@ -99,6 +99,15 @@ class UserRepositoryTest {
 		System.out.println(userLastName);
 	}
 
+	@Test
+	void testFindUserEntityByUserId() {
+		String userId = "abc123";
+		UserEntity userEntity =  userRepository.findUserEntityByUserId(userId);
+
+		assertNotNull(userEntity);
+		assertTrue(userEntity.getUserId().equals(userId));
+	}
+
 	private void createRecords() {
 		// Prepare UserEntity
 		UserEntity userEntity = new UserEntity();
