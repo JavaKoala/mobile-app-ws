@@ -39,6 +39,7 @@ import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -56,6 +57,8 @@ public class UserController {
 	@Autowired
 	AddressService addressesService;
 
+	@ApiOperation(value="The Get User Details Web Service Endpoint",
+			notes="This Web Service Endpoint returns User Details. User public user id in URL path. for example: /users/abc123")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")
 	})
